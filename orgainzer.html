@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Entry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #8e2de2, #4a00e0);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0 20px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: #fff;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.5);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Animations */
+        .container {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media(max-width: 500px) {
+            .container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Event Entry</h1>
+        <!-- Don't Touch this Div -->
+        <div>
+            <input type="text" id="firstName" name="firstName" placeholder="Event Name"><br>
+            <input type="text" id="lastName" name="lastName" placeholder="Event Details"><br>
+            <input type="text" id="Place" name="Place" placeholder="Place"><br>
+            <input type="datetime-local" id="Event-time" name="Event-time"><br>
+            <input type="text" id="catogry" name="catogry" placeholder="Event Category"><br>
+
+            <br><br>
+            <button id="submit" type="submit">Submit</button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getDatabase, ref, set, push, child, onValue } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCBeR4iYhawQ7EPJ_98Mdfg5fIjmGBQ5no",
+            authDomain: "fir-submit-data-6c12d.firebaseapp.com",
+            projectId: "fir-submit-data-6c12d",
+            storageBucket: "fir-submit-data-6c12d.appspot.com",
+            messagingSenderId: "92998807192",
+            appId: "1:92998807192:web:e09a794ded8d95fb006aed"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.getElementById('submit').addEventListener('click', (e) => {
+
+            const userId = push(child(ref(database), 'users')).key;
+
+            set(ref(database, 'users/' + userId), {
+                last_name: document.getElementById('lastName').value,
+                first_name: document.getElementById('firstName').value,
+                Place_name: document.getElementById('Place').value,
+                Event_time: document.getElementById('Event-time').value,
+                Event_catogry:document.getElementById('catogry').value,
+            })
+                .then(() => {
+                    alert('Data submitted successfully');
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        });
+    </script>
+</body>
+
+</html>
